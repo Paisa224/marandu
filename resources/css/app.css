@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    background-color: #f8f9fa;
+    color: #343a40;
+}
+.navbar {
+    background-color: #ffffff;
+    border-bottom: 1px solid #dee2e6;
+    position: fixed;
+    width: 100%;
+    z-index: 1030;
+}
+.sidebar {
+    background-color: #ffffff;
+    border-right: 1px solid #dee2e6;
+    position: fixed;
+    height: 100%;
+    padding-top: 60px;
+    width: 250px;
+    z-index: 1020;
+}
+.sidebar-right {
+    background-color: #ffffff;
+    border-left: 1px solid #dee2e6;
+    position: fixed;
+    height: 100%;
+    padding-top: 60px;
+    right: 0;
+    width: 250px;
+    z-index: 1020;
+}
+.main-content {
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 5px;
+    color: #343a40;
+    margin-left: 250px;
+    margin-right: 250px;
+    padding-top: 70px;
+}
+.nav-link {
+    color: #343a40 !important;
+}
+.nav-link.active {
+    color: #007bff !important;
+}
+.nav-link:hover {
+    background-color: #007bff;
+    color: #ffffff !important;
+    border-radius: 5px;
+}
+.card-header {
+    background-color: #007bff;
+    border-bottom: 1px solid #dee2e6;
+    color: #ffffff;
+}
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+.btn-link {
+    color: #007bff;
+}
+.btn-link:hover {
+    color: #0056b3;
+}
+@media (max-width: 768px) {
+    .sidebar,
+    .sidebar-right {
+        display: none;
+    }
+    .main-content {
+        margin-left: 0;
+        margin-right: 0;
+        padding-top: 60px;
+    }
+}
+.form-group {
+    margin-bottom: 1rem;
+}
+.invalid-feedback {
+    display: block;
+}
+.container {
+    max-width: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.card {
+    margin-bottom: 1rem;
+}
