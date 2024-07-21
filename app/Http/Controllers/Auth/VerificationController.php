@@ -3,11 +3,18 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Notifications\VerificationCode;
 
 class VerificationController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function show()
     {
         return view('auth.verify');
@@ -19,16 +26,32 @@ class VerificationController extends Controller
             'verification_code' => ['required', 'string', 'size:4'],
         ]);
 
-        $user = User::where('verification_code', $request->verification_code)->first();
+        $user = Auth::user();
 
-        if (!$user) {
+        if ($user->verification_code !== $request->verification_code) {
             return redirect()->back()->withErrors(['verification_code' => 'El código de verificación es inválido.']);
         }
 
-        $user->email_verified_at = now();
-        $user->verification_code = null; 
+        $user->markEmailAsVerified();
+        $user->verification_code = null;
         $user->save();
 
-        return redirect('/home')->with('status', 'Tu cuenta ha sido verificada con éxito.');
+        return redirect()->route('home')->with('status', 'Tu cuenta ha sido verificada con éxito.');
+    }
+
+    public function resend(Request $request)
+    {
+        $user = Auth::user();
+
+        if ($user->hasVerifiedEmail()) {
+            return redirect()->route('home');
+        }
+
+        $user->verification_code = rand(1000, 9999);
+        $user->save();
+
+        $user->notify(new VerificationCode($user->verification_code));
+
+        return back()->with('resent', true);
     }
 }

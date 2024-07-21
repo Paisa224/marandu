@@ -3,11 +3,19 @@
 @section('content')
 <div class="max-w-md mx-auto bg-white shadow-lg rounded-lg p-6">
     <h1 class="text-4xl font-bold text-center mb-6 text-gray-800">Verificación de Cuenta</h1>
-    @if (session('status'))
+    @if (session('resent'))
         <div class="mb-4 font-medium text-sm text-green-600">
-            {{ session('status') }}
+            {{ __('Un nuevo enlace de verificación ha sido enviado a tu dirección de correo electrónico.') }}
         </div>
     @endif
+    <div class="mb-4">
+        {{ __('Antes de continuar, por favor verifica tu correo electrónico para un enlace de verificación.') }}
+        {{ __('Si no recibiste el correo electrónico') }},
+    </div>
+    <form class="d-inline" method="POST" action="{{ route('verification.resend') }}">
+        @csrf
+        <button type="submit" class="w-full py-2 mb-4 text-xl bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">{{ __('haz clic aquí para solicitar otro') }}</button>
+    </form>
     <form method="POST" action="{{ route('verify.post') }}">
         @csrf
         <div class="mb-4">

@@ -1,5 +1,5 @@
 @extends('layouts.auth_layout')
-
+<link href="{{ asset('css/app.css') }}" rel="stylesheet">
 @section('content')
 <div class="max-w-md mx-auto bg-white shadow-lg rounded-lg p-6">
     <h1 class="text-4xl font-bold text-center mb-6 text-gray-800">Iniciar Sesión</h1>

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\TweetController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\HomeController;
@@ -15,20 +16,27 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Rutas de autenticación con verificación de correo electrónico
+Auth::routes(['verify' => true]);
+
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('register', [RegisterController::class, 'register']);
 
+// Ruta protegida que requiere verificación de correo electrónico
+Route::get('/home', [HomeController::class, 'index'])->middleware('verified')->name('home');
+
+// Rutas adicionales para verificación personalizada
 Route::get('verify', [VerificationController::class, 'show'])->name('verify');
 Route::post('verify', [VerificationController::class, 'verify'])->name('verify.post');
+Route::post('email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
 
+// Agrupación de rutas protegidas por middleware de autenticación y verificación de email
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
-});
 
-Route::middleware(['auth'])->group(function () {
     Route::get('/settings', [UserController::class, 'settings'])->name('settings');
     Route::put('/settings', [UserController::class, 'updateSettings'])->name('settings.update');
     Route::get('/users/{id}/audits', [UserController::class, 'showAudits'])->name('users.audits');
