@@ -1,5 +1,5 @@
 <?php
-use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TweetController;
 use App\Http\Controllers\UserController;
@@ -7,6 +7,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\ExploreController;
 use App\Http\Controllers\NotificationController;
 
@@ -20,10 +21,14 @@ Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('register', [RegisterController::class, 'register']);
 
-Auth::routes();
+Route::get('verify', [VerificationController::class, 'show'])->name('verify');
+Route::post('verify', [VerificationController::class, 'verify'])->name('verify.post');
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+});
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/settings', [UserController::class, 'settings'])->name('settings');
     Route::put('/settings', [UserController::class, 'updateSettings'])->name('settings.update');
     Route::get('/users/{id}/audits', [UserController::class, 'showAudits'])->name('users.audits');
@@ -44,8 +49,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/tweets/{id}/like', [TweetController::class, 'like'])->name('tweets.like');
     Route::post('/tweets/{id}/unlike', [TweetController::class, 'unlike'])->name('tweets.unlike');
 
-    Route::get('/tweets/{tweet}/edit', [TweetController::class, 'edit'])
-        ->name('tweets.edit');
+    Route::get('/tweets/{tweet}/edit', [TweetController::class, 'edit'])->name('tweets.edit');
     Route::put('/tweets/{tweet}', [TweetController::class, 'update'])->name('tweets.update');
     Route::delete('/tweets/{tweet}', [TweetController::class, 'destroy'])->name('tweets.destroy');
     Route::post('/tweets/{tweet}/delete', [TweetController::class, 'destroy'])->name('tweets.delete');
@@ -59,4 +63,3 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/search', [SearchController::class, 'search'])->name('search');
     });
 });
-

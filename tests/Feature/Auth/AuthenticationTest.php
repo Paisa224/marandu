@@ -3,50 +3,78 @@
 namespace Tests\Feature\Auth;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class AuthenticationTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
-    public function test_users_can_authenticate_using_the_login_screen(): void
+    /**
+     * Test login with valid username and password.
+     *
+     * @return void
+     */
+    public function test_user_can_login_with_valid_credentials()
     {
-        // Confirmar que la columna 'username' existe
-        $this->assertTrue(Schema::hasColumn('users', 'username'), 'La tabla users no tiene la columna username');
-
+        // Create a user
         $user = User::factory()->create([
             'username' => 'testuser',
-            'password' => Hash::make('password'),
+            'password' => bcrypt($password = 'password'),
         ]);
 
-        $credentials = [
+        // Attempt to login
+        $response = $this->post('/login', [
             'username' => 'testuser',
-            'password' => 'password',
-        ];
+            'password' => $password,
+        ]);
 
-        // Verificar que el usuario se creó correctamente y que la contraseña está encriptada
-        $this->assertDatabaseHas('users', ['username' => 'testuser']);
-        $this->assertTrue(Hash::check('password', $user->password), 'La contraseña no coincide');
-
-        // Añadir depuración para verificar los datos de la solicitud
-        Log::info('Test de Autenticación - Credenciales:', $credentials);
-
-        try {
-            $response = $this->post('/login', $credentials);
-            Log::info('Respuesta de Autenticación:', ['content' => $response->getContent(), 'status' => $response->status()]);
-        } catch (\Exception $e) {
-            Log::error('Error durante el intento de login: ' . $e->getMessage(), ['exception' => $e]);
-            dd($e->getMessage());
-        }
-
-        // Verificar la respuesta de la solicitud de login
+        // Assert the login was successful
         $response->assertStatus(302);
-        $response->assertRedirect(route('home'));
+        $this->assertAuthenticatedAs($user);
+    }
 
-        $this->assertAuthenticated();
+    /**
+     * Test login with invalid username.
+     *
+     * @return void
+     */
+    public function test_user_cannot_login_with_invalid_username()
+    {
+        // Attempt to login with an invalid username
+        $response = $this->post('/login', [
+            'username' => 'invaliduser',
+            'password' => 'password',
+        ]);
+
+        // Assert the login failed
+        $response->assertStatus(302);
+        $response->assertSessionHasErrors(); // Verifica cualquier error en la sesión
+        $this->assertGuest();
+    }
+
+    /**
+     * Test login with invalid password.
+     *
+     * @return void
+     */
+    public function test_user_cannot_login_with_invalid_password()
+    {
+        // Create a user
+        $user = User::factory()->create([
+            'username' => 'testuser',
+            'password' => bcrypt('password'),
+        ]);
+
+        // Attempt to login with an invalid password
+        $response = $this->post('/login', [
+            'username' => 'testuser',
+            'password' => 'invalidpassword',
+        ]);
+
+        // Assert the login failed
+        $response->assertStatus(302);
+        $response->assertSessionHasErrors(); // Verifica cualquier error en la sesión
+        $this->assertGuest();
     }
 }

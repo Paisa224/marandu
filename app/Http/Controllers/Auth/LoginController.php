@@ -21,6 +21,7 @@ class LoginController extends Controller
     {
         return 'username';
     }
+    
 
     protected function credentials(Request $request)
     {

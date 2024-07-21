@@ -8,13 +8,13 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
-use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Mail;
 
 class RegisterController extends Controller
 {
     use RegistersUsers;
 
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/verify';
 
     public function __construct()
     {
@@ -25,12 +25,18 @@ class RegisterController extends Controller
     {
         $this->validator($request->all())->validate();
 
-        event(new Registered($user = $this->create($request->all())));
+        $user = $this->create($request->all());
 
-        $this->guard()->login($user);
+        $verificationCode = rand(1000, 9999);
+        $user->verification_code = $verificationCode;
+        $user->save();
 
-        return $this->registered($request, $user)
-            ?: redirect($this->redirectPath());
+        Mail::send('emails.verification', ['code' => $verificationCode], function ($message) use ($user) {
+            $message->to($user->email);
+            $message->subject('Código de verificación');
+        });
+
+        return redirect()->route('verify')->with('status', 'Se ha enviado un código de verificación a tu correo.');
     }
 
     protected function validator(array $data)
