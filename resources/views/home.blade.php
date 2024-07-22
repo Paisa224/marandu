@@ -233,9 +233,6 @@
                         </div>
                     </div>
                     @endforeach
-                    <div class="mt-3">
-                        {{ $tweets->links() }}
-                    </div>
                     @endif
                 </div>
             </div>

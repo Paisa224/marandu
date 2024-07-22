@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Tweet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
+use App\Notifications\FollowerTweetNotification;
 
 class TweetController extends Controller
 {
@@ -78,5 +80,20 @@ class TweetController extends Controller
         $tweet->delete();
 
         return redirect()->route('home')->with('success', 'Tweet borrado exitosamente.');
+    }
+    public function postTweet(Request $request)
+    {
+        $user = auth()->user();
+        $tweet = new Tweet();
+        $tweet->content = $request->content;
+        $tweet->user_id = $user->id;
+        $tweet->save();
+
+        // Notificar a los seguidores
+        foreach ($user->followers as $follower) {
+            $follower->notify(new FollowerTweetNotification($user->name, $tweet));
+        }
+
+        return "¡Tweet publicado!";
     }
 }

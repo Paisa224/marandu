@@ -12,7 +12,7 @@ use Illuminate\Auth\MustVerifyEmail;
 
 class User extends Authenticatable implements MustVerifyEmailContract, AuditableContract
 {
-    use HasFactory, Notifiable, Auditable, MustVerifyEmail; 
+    use HasFactory, Notifiable, Auditable, MustVerifyEmail;
 
     protected $fillable = [
         'name', 'username', 'email', 'password', 'verification_code',

@@ -18,8 +18,8 @@ class HomeController extends Controller
             $followings = $user->followings()->orderBy('name')->take(5)->get();
             $followers = $user->followers()->orderBy('name')->take(5)->get();
 
-            // Obtener tweets con paginación
-            $tweets = Tweet::with('user')->latest()->paginate(10);
+            // Obtener todos los tweets
+            $tweets = Tweet::with('user')->latest()->get();
 
             // Obtener sugerencias de usuarios ordenadas alfabéticamente
             $suggestions = User::whereNotIn('id', $user->followings->pluck('id')->push($user->id))
@@ -31,7 +31,7 @@ class HomeController extends Controller
             $followingsCount = 0;
             $followings = collect();
             $followers = collect();
-            $tweets = Tweet::with('user')->latest()->paginate(10);
+            $tweets = Tweet::with('user')->latest()->get();
             $suggestions = collect();
         }
 

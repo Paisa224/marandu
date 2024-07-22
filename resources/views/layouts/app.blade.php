@@ -181,7 +181,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('notifications') }}">
+                                    <a class="nav-link" href="{{ route('notifications.index') }}">
                                         <i class="fas fa-bell"></i> Notificaciones
                                     </a>
                                 </li>
@@ -226,7 +226,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('notifications') }}">
+                                    <a class="nav-link" href="{{ route('notifications.index') }}">
                                         <i class="fas fa-bell"></i> Notificaciones
                                     </a>
                                 </li>

@@ -61,13 +61,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/tweets/{tweet}', [TweetController::class, 'update'])->name('tweets.update');
     Route::delete('/tweets/{tweet}', [TweetController::class, 'destroy'])->name('tweets.destroy');
     Route::post('/tweets/{tweet}/delete', [TweetController::class, 'destroy'])->name('tweets.delete');
-
-    Route::get('/search', [SearchController::class, 'search'])->name('search');
     Route::get('/suggestions', [UserController::class, 'suggestions'])->name('suggestions');
-    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/mark-as-read/{id}', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
     Route::get('/explore', [ExploreController::class, 'index'])->name('explore');
+    Route::get('/search', [SearchController::class, 'search'])->name('search');
 
-    Route::middleware(['log.user.activity'])->group(function () {
-        Route::get('/search', [SearchController::class, 'search'])->name('search');
-    });
-});
+});  

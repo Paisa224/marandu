@@ -2,7 +2,10 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "keywords": [
+        "laravel",
+        "framework"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.2",
@@ -22,11 +25,14 @@
         "phpunit/phpunit": "^11.0.1"
     },
     "autoload": {
-     "psr-4": {
-        "App\\": "app/",
+        "psr-4": {
+            "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/Http/Middleware/LogUserActivity.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

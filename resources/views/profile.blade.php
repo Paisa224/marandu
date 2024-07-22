@@ -21,13 +21,11 @@
                         @if(Auth::id() == $user->id)
                             <a href="{{ route('settings') }}" class="btn btn-primary me-2">Editar perfil</a>
                         @else
-                            <form action="{{ route('follow', $user->id) }}" method="POST">
+                            <form action="{{ route(Auth::user()->followings->contains($user) ? 'unfollow' : 'follow', $user->id) }}" method="POST">
                                 @csrf
-                                @if(Auth::user()->followings->contains($user))
-                                    <button type="submit" class="btn btn-outline-danger me-2">Dejar de seguir</button>
-                                @else
-                                    <button type="submit" class="btn btn-outline-primary me-2">Seguir</button>
-                                @endif
+                                <button type="submit" class="btn btn-outline-{{ Auth::user()->followings->contains($user) ? 'danger' : 'primary' }} me-2">
+                                    {{ Auth::user()->followings->contains($user) ? 'Dejar de seguir' : 'Seguir' }}
+                                </button>
                             </form>
                         @endif
                     </div>
@@ -71,7 +69,9 @@
                     @foreach($followers as $follower)
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <div>
-                            <strong>{{ $follower->name }}</strong> ({{ '@'.$follower->username }})
+                            <a href="{{ route('user.show', $follower->username) }}" class="text-dark fw-bold">
+                                <strong>{{ $follower->name }}</strong> ({{ '@'.$follower->username }})
+                            </a>
                         </div>
                         <form action="{{ route(Auth::user()->followings->contains($follower) ? 'unfollow' : 'follow', $follower->id) }}" method="POST">
                             @csrf
@@ -101,11 +101,15 @@
                     @foreach($followings as $following)
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <div>
-                            <strong>{{ $following->name }}</strong> ({{ '@'.$following->username }})
+                            <a href="{{ route('user.show', $following->username) }}" class="text-dark fw-bold">
+                                <strong>{{ $following->name }}</strong> ({{ '@'.$following->username }})
+                            </a>
                         </div>
-                        <form action="{{ route('unfollow', $following->id) }}" method="POST">
+                        <form action="{{ route(Auth::user()->followings->contains($following) ? 'unfollow' : 'follow', $following->id) }}" method="POST">
                             @csrf
-                            <button type="submit" class="btn btn-outline-danger btn-sm">Dejar de Seguir</button>
+                            <button type="submit" class="btn btn-outline-{{ Auth::user()->followings->contains($following) ? 'danger' : 'primary' }} btn-sm">
+                                {{ Auth::user()->followings->contains($following) ? 'Dejar de Seguir' : 'Seguir' }}
+                            </button>
                         </form>
                     </li>
                     @endforeach

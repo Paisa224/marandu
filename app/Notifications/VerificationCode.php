@@ -27,7 +27,11 @@ class VerificationCode extends Notification
         $url = url('/verify?verification_code=' . $this->verification_code);
 
         return (new MailMessage)
+                    ->subject('Código de Verificación')
+                    ->greeting('¡Hola!')
                     ->line('Tu código de verificación es: ' . $this->verification_code)
-                    ->action('Verificar Email', $url);
+                    ->action('Verificar Email', $url)
+                    ->line('Si tienes problemas haciendo clic en el botón "Verificar Email", copia y pega la URL a continuación en tu navegador web: ' . $url)
+                    ->salutation('Saludos, Marandu');
     }
 }
