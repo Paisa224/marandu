@@ -90,8 +90,34 @@ Los usuarios pueden seguir a otros, ver su feed personal y descubrir contenido p
 
 ## Uso
 
-1. Visita `http://localhost:8000` en tu navegador.
-2. Regístrate o inicia sesión con una cuenta existente.
+1. Inicia el servidor:
+
+bash
+
+php artisan serve
+
+
+Visita `http://localhost:8000` en tu navegador.
+
+2. Regístate con un correo valido porfavor(En todo caso que no quiera proporciono un user de prueba),
+
+user: segel
+pass: segel123
+
+Es obligatorio que ejecute el siguiente query dentro de su base de datos:
+
+    *UPDATE users SET email_verified_at = NOW() WHERE username = 'segel';*
+
+    o desde la terminal
+
+    bash
+    php artisan tinker
+    $user = App\Models\User::where('username', 'segel')->first();
+    $user->email_verified_at = now();
+    $user->save();
+
+Al ejecutar el comando seeders se crean automaticamente 10 users randoms a modo de poder interactuar
+
 3. ¡Comienza a publicar tus pensamientos y sigue a otros usuarios!
 
 ## Licencia

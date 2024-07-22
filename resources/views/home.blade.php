@@ -109,7 +109,6 @@
                     </li>
                     @endforeach
                 </ul>
-                <a href="{{ route('suggestions') }}" class="btn btn-link mt-2">Mostrar más</a>
             </div>
         </div>
     </div>

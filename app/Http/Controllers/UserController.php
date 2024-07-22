@@ -111,17 +111,16 @@ class UserController extends Controller
     {
         $user = Auth::user();
         if ($user) {
-            $followingsIds = $user->followings()->pluck('id');
+            // Obtener los IDs de los usuarios que el usuario autenticado sigue
+            $followingsIds = $user->followings()->pluck('id')->toArray();
+    
+            // Obtener los usuarios que el usuario autenticado no sigue
             $suggestions = User::whereNotIn('id', $followingsIds)
                 ->where('id', '!=', $user->id)
                 ->orderBy('name', 'asc')
                 ->take(10)
                 ->get();
-        } else {
-            $suggestions = collect();
         }
-
-        return view('suggestions', compact('suggestions'));
     }
 
     // Mostrar la página de configuración
