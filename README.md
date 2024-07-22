@@ -1,20 +1,19 @@
+
 # Marandu
 
-Marandu es una aplicación de microblogging inspirada en Twitter. 
-Permite a los usuarios publicar y compartir mensajes cortos, seguir a otros usuarios y más.
+Marandu es una aplicación de microblogging inspirada en Twitter que permite a los usuarios publicar y compartir mensajes cortos, seguir a otros usuarios y más.
 
 ## Descripción
 
-Marandu es una aplicación web que permite a los usuarios registrarse, iniciar sesión y compartir pensamientos en forma de tweets. 
-Los usuarios pueden seguir a otros, ver su feed personal y descubrir contenido popular.
+Marandu es una aplicación web que permite a los usuarios registrarse, iniciar sesión y compartir pensamientos en forma de tweets. Los usuarios pueden seguir a otros, ver su feed personal y descubrir contenido popular.
 
 ## Características
 
-- Registro e inicio de sesión de usuarios.
-- Publicación de tweets.
-- Seguimiento y dejar de seguir a usuarios.
-- Feed personal.
-- Descubrimiento de contenido popular.
+- Registro e inicio de sesión de usuarios
+- Publicación de tweets
+- Seguimiento y dejar de seguir a usuarios
+- Feed personal
+- Descubrimiento de contenido popular
 
 ## Tecnologías Utilizadas
 
@@ -35,88 +34,87 @@ Los usuarios pueden seguir a otros, ver su feed personal y descubrir contenido p
 
 1. Clona el repositorio:
 
-    bash
-
+    ```bash
     git clone https://github.com/Paisa224/marandu
-
     cd marandu
-    
+    ```
 
 2. Instala las dependencias del backend:
 
-    bash
-
+    ```bash
     composer install
-   
+    ```
 
 3. Instala las dependencias del frontend:
 
-    bash
-
+    ```bash
     npm install
-  
+    ```
 
-4. La configuracion de .env
+4. Configura el archivo `.env`:
 
-    Deje una configuracion apta para su uso,
-    Favor crear base de datos: marandu
-    Deje la configuracion de envio de correo para validacion mediante codigo "NO TOCAR .ENV"
-    La contraseña es la de la aplicacion por lo tanto es seguro, se eliminara una vez me confirme que haya probado todo.
-   
+    - Crea una base de datos llamada `marandu`.
+    - Deja la configuración de envío de correo para validación mediante código como está ("Ajustar .env exable a .env"). La contraseña es la de la aplicación y se eliminará una vez me confirmen que terminaron con las pruebas.
+    - Configura la base de datos en el archivo `.env`:
 
-5. Configura la base de datos en el archivo `.env`:
-    env
+    ```env
     DB_CONNECTION=mysql
     DB_HOST=127.0.0.1
     DB_PORT=3306
     DB_DATABASE=marandu
-    DB_USERNAME=tu_usuario
-    DB_PASSWORD=tu_contraseña
-    
-6. Ejecuta las migraciones y seeders:
+    DB_USERNAME=root
+    DB_PASSWORD=
+    ```
 
-    bash
-    
+5. Ejecuta las migraciones y seeders:
+
+    ```bash
     php artisan migrate --seed
+    ```
 
-7. Inicia el servidor de desarrollo:
+6. Inicia el servidor de desarrollo:
 
-    bash
+    ```bash
     php artisan serve
-    
-8. Compila los recursos del frontend:
-    bash
+    ```
+
+7. Compila los recursos del frontend:
+
+    ```bash
     npm run dev
+    ```
 
 ## Uso
 
 1. Inicia el servidor:
 
-bash
+    ```bash
+    php artisan serve
+    ```
 
-php artisan serve
+    Visita `http://localhost:8000` en tu navegador.
 
+2. Regístrate con un correo válido. Si no deseas proporcionar uno, puedes usar el siguiente usuario de prueba:
 
-Visita `http://localhost:8000` en tu navegador.
+    - Usuario: segel
+    - Contraseña: segel123
 
-2. Regístate con un correo valido porfavor(En todo caso que no quiera proporciono un user de prueba),
+    Es obligatorio ejecutar el siguiente query en tu base de datos:
 
-user: segel
-pass: segel123
+    ```sql
+    UPDATE users SET email_verified_at = NOW() WHERE username = 'segel';
+    ```
 
-Es obligatorio que ejecute el siguiente query dentro de su base de datos:
+    O desde la terminal:
 
-    *UPDATE users SET email_verified_at = NOW() WHERE username = 'segel';*
-
-    o desde la terminal
-
-    bash
+    ```bash
     php artisan tinker
-    $user = App\Models\User::where('username', 'segel')->first();
+    $user = App\Models.User::where('username', 'segel')->first();
     $user->email_verified_at = now();
     $user->save();
+    ```
 
-Al ejecutar el comando seeders se crean automaticamente 10 users randoms a modo de poder interactuar
+    Al ejecutar el comando `seeders`, se crean automáticamente 10 usuarios aleatorios para interactuar.
 
 3. ¡Comienza a publicar tus pensamientos y sigue a otros usuarios!
 
@@ -126,6 +124,6 @@ Distribuido bajo la Licencia MIT. Ver `LICENSE` para más información.
 
 ## Contacto
 
-Tu Nombre - Manuel Salinas 
+**Manuel Salinas**
 
-Link del Proyecto: https://github.com/Paisa224/marandu
+Link del Proyecto: [https://github.com/Paisa224/marandu]
