@@ -66,5 +66,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/notifications/mark-as-read/{id}', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
     Route::get('/explore', [ExploreController::class, 'index'])->name('explore');
     Route::get('/search', [SearchController::class, 'search'])->name('search');
+    
 
 });  

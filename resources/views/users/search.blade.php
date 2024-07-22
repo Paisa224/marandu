@@ -27,13 +27,19 @@
                         @foreach ($users as $user)
                             <div class="media mb-3">
                                 <div class="media-body">
-                                    <h5 class="mt-0"><a href="{{ route('users.show', $user->id) }}">{{ $user->name }}</a></h5>
-                                    <p class="text-muted">{{ $user->username }}</p>
-                                    @if (!auth()->user()->following->contains($user))
-                                        <form action="{{ route('users.follow', $user) }}" method="POST">
+                                    <h5 class="mt-0">
+                                        <a href="{{ route('users.show', $user->id) }}">{{ $user->name }}</a>
+                                    </h5>
+                                    <p class="text-muted">{{ '@' . $user->username }}</p>
+                                    @if (auth()->user()->id !== $user->id)
+                                        <form action="{{ route(auth()->user()->following->contains($user) ? 'users.unfollow' : 'users.follow', $user) }}" method="POST" class="d-inline">
                                             @csrf
-                                            <button type="submit" class="btn btn-primary">Seguir</button>
+                                            <button type="submit" class="btn btn-outline-{{ auth()->user()->following->contains($user) ? 'danger' : 'primary' }} btn-sm">
+                                                {{ auth()->user()->following->contains($user) ? 'Dejar de Seguir' : 'Seguir' }}
+                                            </button>
                                         </form>
+                                    @else
+                                        <a href="{{ route('users.show', auth()->user()->id) }}" class="btn btn-outline-secondary btn-sm">Ir a mi perfil</a>
                                     @endif
                                 </div>
                             </div>

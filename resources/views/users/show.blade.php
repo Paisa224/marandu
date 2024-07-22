@@ -73,12 +73,16 @@
                                 <strong>{{ $follower->name }}</strong> ({{ '@'.$follower->username }})
                             </a>
                         </div>
-                        <form action="{{ route(Auth::user()->followings->contains($follower) ? 'unfollow' : 'follow', $follower->id) }}" method="POST">
-                            @csrf
-                            <button type="submit" class="btn btn-outline-{{ Auth::user()->followings->contains($follower) ? 'danger' : 'primary' }} btn-sm">
-                                {{ Auth::user()->followings->contains($follower) ? 'Dejar de Seguir' : 'Seguir' }}
-                            </button>
-                        </form>
+                        @if($follower->id !== Auth::id())
+                            <form action="{{ route(Auth::user()->followings->contains($follower) ? 'unfollow' : 'follow', $follower->id) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-outline-{{ Auth::user()->followings->contains($follower) ? 'danger' : 'primary' }} btn-sm">
+                                    {{ Auth::user()->followings->contains($follower) ? 'Dejar de Seguir' : 'Seguir' }}
+                                </button>
+                            </form>
+                        @else
+                            <a href="{{ route('user.show', Auth::user()->username) }}" class="btn btn-outline-secondary btn-sm">Ir a mi perfil</a>
+                        @endif
                     </li>
                     @endforeach
                 </ul>
@@ -86,6 +90,7 @@
         </div>
     </div>
 </div>
+
 
 <!-- Modal para Seguidos -->
 <div class="modal fade" id="followingsModal" tabindex="-1" aria-labelledby="followingsModalLabel" aria-hidden="true">
@@ -105,12 +110,16 @@
                                 <strong>{{ $following->name }}</strong> ({{ '@'.$following->username }})
                             </a>
                         </div>
-                        <form action="{{ route(Auth::user()->followings->contains($following) ? 'unfollow' : 'follow', $following->id) }}" method="POST">
-                            @csrf
-                            <button type="submit" class="btn btn-outline-{{ Auth::user()->followings->contains($following) ? 'danger' : 'primary' }} btn-sm">
-                                {{ Auth::user()->followings->contains($following) ? 'Dejar de Seguir' : 'Seguir' }}
-                            </button>
-                        </form>
+                        @if($following->id !== Auth::id())
+                            <form action="{{ route(Auth::user()->followings->contains($following) ? 'unfollow' : 'follow', $following->id) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-outline-{{ Auth::user()->followings->contains($following) ? 'danger' : 'primary' }} btn-sm">
+                                    {{ Auth::user()->followings->contains($following) ? 'Dejar de Seguir' : 'Seguir' }}
+                                </button>
+                            </form>
+                        @else
+                            <a href="{{ route('user.show', Auth::user()->username) }}" class="btn btn-outline-secondary btn-sm">Ir a mi perfil</a>
+                        @endif
                     </li>
                     @endforeach
                 </ul>
@@ -118,6 +127,7 @@
         </div>
     </div>
 </div>
+
 @endsection
 
 @section('styles')
